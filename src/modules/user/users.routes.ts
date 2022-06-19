@@ -1,4 +1,11 @@
 import express from 'express';
+import UserController from '../../controllers/user.controller';
+import UserApplication from './application/user.application';
+import UserInfrastructure from './infrastructure/user.infrastructure';
+
+const infrastructure = new UserInfrastructure();
+const application = new UserApplication(infrastructure);
+const controller = new UserController(application);
 
 class Routes {
   router = express.Router();
@@ -8,9 +15,7 @@ class Routes {
   }
 
   mountRoutes() {
-    this.router.get('/', (req, res) => {
-      res.json({ message: 'Desde el directori de usuarios' });
-    });
+    this.router.get('/', controller.getAll.bind(controller));
   }
 }
 
