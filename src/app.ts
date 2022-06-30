@@ -7,12 +7,18 @@ class App {
 
   constructor() {
     this.expressApp = express();
+    this.middlewares();
     this.mountRoutes();
   }
 
-  public mountRoutes() {
+  mountRoutes() {
     this.expressApp.use('/users', routesUser);
     this.expressApp.use('/drivers', routesDriver);
+  }
+
+  middlewares() {
+    this.expressApp.use(express.json());
+    this.expressApp.use(express.urlencoded({ extended: true }));
   }
 }
 
