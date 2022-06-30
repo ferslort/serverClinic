@@ -1,4 +1,11 @@
 import express from 'express';
+import DriverApplication from './application/driver.application';
+import DriverController from './driver.controller';
+import DriverInfrastructure from './infrastructure/driver.infrastructure';
+
+const infrastructure = new DriverInfrastructure();
+const application = new DriverApplication(infrastructure);
+const controller = new DriverController(application);
 
 class Routes {
   router = express.Router();
@@ -7,10 +14,8 @@ class Routes {
     this.mountRoutes();
   }
 
-  public mountRoutes() {
-    this.router.use('/', (req, res) => {
-      res.json({ message: 'Desde el directori de drivers' });
-    });
+  mountRoutes() {
+    this.router.post('/', controller.create.bind(controller));
   }
 }
 

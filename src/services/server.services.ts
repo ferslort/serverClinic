@@ -1,7 +1,8 @@
 import http from 'http';
 import app from '../app';
+import { ServiceInterface } from './services.interface';
 
-export default class ServiceServer {
+export default class Server implements ServiceInterface {
   initialize(): Promise<boolean | Error> {
     return new Promise((resolve, reject) => {
       const server = http.createServer(app);
