@@ -13,7 +13,7 @@ class App {
 
   mountRoutes() {
     this.expressApp.use('/users', routesUser);
-    this.expressApp.use('/drivers', routesDriver);
+    this.expressApp.use('/driver', routesDriver);
   }
 
   middlewares() {

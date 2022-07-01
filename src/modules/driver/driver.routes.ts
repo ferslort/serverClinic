@@ -16,6 +16,7 @@ class Routes {
 
   mountRoutes() {
     this.router.post('/', controller.create.bind(controller));
+    this.router.get('/', controller.findAll.bind(controller));
   }
 }
 

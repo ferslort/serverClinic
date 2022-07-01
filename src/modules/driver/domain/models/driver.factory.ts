@@ -6,7 +6,7 @@ export default class DriverFactory {
     const name = driver.name;
     const lastName = driver.lastname;
     const licenseDriver = driver.licenseDriver;
-    const active = driver.active || true;
+    const active = driver.isActive || true;
 
     if (!driver.name) {
       throw new Error('Driver name is required');

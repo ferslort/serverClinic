@@ -4,6 +4,6 @@ export default class DriverModel {
     public name: string,
     public lastname: string,
     public licenseDriver: string,
-    public active: boolean
+    public isActive: boolean
   ) {}
 }
