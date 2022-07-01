@@ -1,25 +1,92 @@
+import { ObjectType, Repository } from 'typeorm';
+import DataBase from '../../services/database.services';
+import { ResponseDto } from '../application/interface/dtos/reponse.dto';
+import Result from '../application/interface/result.interface';
+import * as _ from 'lodash';
+
 export default abstract class BaseInfrastructure<T, U> {
-  async findAll(): Promise<T[]> {
-    throw new Error('Method not implemented.');
+  constructor(private entity: ObjectType<T>) {}
+
+  async findAll(
+    where: object,
+    order: object,
+    relations: string[]
+  ): Promise<Result<T>> {
+    const dataSource = DataBase.dataSource();
+    const repository: Repository<T> = dataSource.getRepository(this.entity);
+
+    const result = await repository.find({ where, order, relations });
+
+    return ResponseDto<T>('', result);
   }
 
-  async findById(id: U): Promise<T> {
-    throw new Error('Method not implemented.');
+  async findOne(where: object): Promise<Result<T>> {
+    const dataSource = DataBase.dataSource();
+    const repository: Repository<T> = dataSource.getRepository(this.entity);
+
+    const recordFind = await repository.findOne({ where });
+
+    if (!recordFind) {
+      throw new Error('Record not found');
+    }
+
+    return ResponseDto<T>('', recordFind);
   }
 
-  async findByEmail(email: U): Promise<T> {
-    throw new Error('Method not implemented.');
+  async create(model: T): Promise<Result<T>> {
+    const dataSource = DataBase.dataSource();
+    const repository: Repository<T> = dataSource.getRepository(this.entity);
+
+    const result = await repository.save(model);
+    return ResponseDto<T>('', result);
   }
 
-  async create(driver: T): Promise<T> {
-    throw new Error('Method not implemented.');
+  async update(
+    model: Partial<T>,
+    where: object,
+    relations: string[] = []
+  ): Promise<Result<T>> {
+    const dataSource = DataBase.dataSource();
+    const repository: Repository<T> = dataSource.getRepository(this.entity);
+
+    let recordToUpdate = await repository.findOne({ where, relations });
+
+    recordToUpdate = _.merge(recordToUpdate, model);
+    await repository.save(recordToUpdate);
+
+    return ResponseDto<T>('', recordToUpdate);
   }
 
-  async update(driver: T): Promise<T> {
-    throw new Error('Method not implemented.');
+  async delete(where: object): Promise<Result<T>> {
+    const dataSource = DataBase.dataSource();
+    const repository: Repository<T> = dataSource.getRepository(this.entity);
+
+    let recordToDelete = await repository.findOne({ where });
+
+    recordToDelete = _.merge(recordToDelete, { active: false });
+    await repository.save(recordToDelete);
+
+    return ResponseDto<T>('', recordToDelete);
   }
 
-  async delete(id: U): Promise<void> {
-    throw new Error('Method not implemented.');
+  async getPage(
+    page: number,
+    pageSize: number,
+    where: object,
+    order: object,
+    relations: string[]
+  ): Promise<Result<T>> {
+    const dataSource = DataBase.dataSource();
+    const repository: Repository<T> = dataSource.getRepository(this.entity);
+
+    const [data, total] = await repository.findAndCount({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      where,
+      order,
+      relations
+    });
+
+    return ResponseDto<T>('', data, total);
   }
 }
