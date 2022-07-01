@@ -1,30 +1,27 @@
+import Result from '../../../shared/application/interface/result.interface';
 import BaseRepository from '../../../shared/domain/repositories/BaseRepository';
 import DriverModel from '../domain/models/driver.model';
 
 export default class DriverApplication {
   constructor(private driverRepository: BaseRepository<DriverModel>) {}
 
-  findAll(): Promise<DriverModel[]> {
-    return this.driverRepository.findAll();
+  findAll(): Promise<Result<DriverModel>> {
+    return this.driverRepository.findAll({}, {}, []);
   }
 
-  findById(id: string): Promise<DriverModel> {
-    return this.driverRepository.findById(id);
+  findById(id: string): Promise<Result<DriverModel>> {
+    return this.driverRepository.findOne({});
   }
 
-  findByEmail(email: string): Promise<DriverModel> {
-    return this.driverRepository.findByEmail(email);
-  }
-
-  create(driver: DriverModel): Promise<DriverModel> {
+  create(driver: DriverModel): Promise<Result<DriverModel>> {
     return this.driverRepository.create(driver);
   }
 
-  update(driver: DriverModel): Promise<DriverModel> {
-    return this.driverRepository.update(driver);
+  update(driver: DriverModel): Promise<Result<DriverModel>> {
+    return this.driverRepository.update({}, {}, []);
   }
 
-  delete(id: string): Promise<void> {
-    return this.driverRepository.delete(id);
+  delete(id: string): Promise<Result<DriverModel>> {
+    return this.driverRepository.delete({});
   }
 }
