@@ -1,6 +1,6 @@
 export default class DriverModel {
   constructor(
-    public id: number,
+    public id: string,
     public name: string,
     public lastname: string,
     public licenseDriver: string,
