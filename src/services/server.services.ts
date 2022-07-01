@@ -8,12 +8,12 @@ export default class Server implements ServiceInterface {
       const server = http.createServer(app);
 
       server
-        .listen(3000)
+        .listen(8000)
         .on('error', () => {
           reject(new Error('Server error'));
         })
         .on('listening', () => {
-          console.log('Server listening on port 3000');
+          console.log('Server listening on port 8000');
           resolve(true);
         });
     });
