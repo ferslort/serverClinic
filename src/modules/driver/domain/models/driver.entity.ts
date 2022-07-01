@@ -27,5 +27,5 @@ export class DriverEntity {
     type: 'boolean',
     default: true
   })
-  active!: boolean;
+  isActive!: boolean;
 }
