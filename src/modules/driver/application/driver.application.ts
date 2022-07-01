@@ -5,11 +5,15 @@ import DriverModel from '../domain/models/driver.model';
 export default class DriverApplication {
   constructor(private driverRepository: BaseRepository<DriverModel>) {}
 
-  findAll(): Promise<Result<DriverModel>> {
-    return this.driverRepository.findAll({}, {}, []);
+  findAll(
+    where: any,
+    order: any,
+    relations: string[]
+  ): Promise<Result<DriverModel>> {
+    return this.driverRepository.findAll(where, order, relations);
   }
 
-  findById(id: string): Promise<Result<DriverModel>> {
+  findById(): Promise<Result<DriverModel>> {
     return this.driverRepository.findOne({});
   }
 
