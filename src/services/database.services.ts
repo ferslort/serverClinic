@@ -13,10 +13,10 @@ export default class DataBase implements ServiceInterface {
       type: 'mysql',
       host: 'localhost',
       port: 5200,
-      user: 'root',
+      username: 'root',
       password: '12345',
       entities: ['src/**/*.entity.ts'],
-      database: 'dbnodejs',
+      database: 'dbnode',
       synchronize: true,
       logging: false
     } as DataSourceOptions;
