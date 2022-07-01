@@ -3,6 +3,7 @@ import DataBase from '../../services/database.services';
 import { ResponseDto } from '../application/interface/dtos/reponse.dto';
 import Result from '../application/interface/result.interface';
 import * as _ from 'lodash';
+import { Trace } from '../../helpers/trace';
 
 export default abstract class BaseInfrastructure<T, U> {
   constructor(private entity: ObjectType<T>) {}
@@ -16,8 +17,7 @@ export default abstract class BaseInfrastructure<T, U> {
     const repository: Repository<T> = dataSource.getRepository(this.entity);
 
     const result = await repository.find({ where, order, relations });
-
-    return ResponseDto<T>('', result);
+    return ResponseDto<T>(Trace.trace(), result);
   }
 
   async findOne(where: object): Promise<Result<T>> {
@@ -30,7 +30,7 @@ export default abstract class BaseInfrastructure<T, U> {
       throw new Error('Record not found');
     }
 
-    return ResponseDto<T>('', recordFind);
+    return ResponseDto<T>(Trace.trace(), recordFind);
   }
 
   async create(model: T): Promise<Result<T>> {
@@ -38,7 +38,7 @@ export default abstract class BaseInfrastructure<T, U> {
     const repository: Repository<T> = dataSource.getRepository(this.entity);
 
     const result = await repository.save(model);
-    return ResponseDto<T>('', result);
+    return ResponseDto<T>(Trace.trace(), result);
   }
 
   async update(
@@ -54,7 +54,7 @@ export default abstract class BaseInfrastructure<T, U> {
     recordToUpdate = _.merge(recordToUpdate, model);
     await repository.save(recordToUpdate);
 
-    return ResponseDto<T>('', recordToUpdate);
+    return ResponseDto<T>(Trace.trace(), recordToUpdate);
   }
 
   async delete(where: object): Promise<Result<T>> {
@@ -66,7 +66,7 @@ export default abstract class BaseInfrastructure<T, U> {
     recordToDelete = _.merge(recordToDelete, { active: false });
     await repository.save(recordToDelete);
 
-    return ResponseDto<T>('', recordToDelete);
+    return ResponseDto<T>(Trace.trace(), recordToDelete);
   }
 
   async getPage(
@@ -87,6 +87,6 @@ export default abstract class BaseInfrastructure<T, U> {
       relations
     });
 
-    return ResponseDto<T>('', data, total);
+    return ResponseDto<T>(Trace.trace(), data, total);
   }
 }
